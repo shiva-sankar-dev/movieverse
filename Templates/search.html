@@ -1,0 +1,39 @@
+{% extends 'header-footer.html' %}
+{% load static %}
+{% block header %}
+<br>
+<br>
+<br>
+<br>
+
+
+
+<div class="catalog">
+    <div class="container">
+        <div class="row row--grid">
+            <!-- card -->
+            {% for data in result %}
+            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                <div class="card">
+                    <div class="card__cover">
+                        <img src="/static/media/{{data.movie_cover}}" alt="">
+                        <a href="{% url 'productdetails' data.id  %}" class="card__play">    
+                            <i class="fa fa-play"></i>
+                        </a>
+                        {% comment %} <span class="card__rate card__rate--green">8.4</span>c {% endcomment %}
+                    </div>
+                    <div class="card__content">
+                        <h3 class="card__title"><a href="details.html">{{data.movie_title}}</a></h3>
+                        <span class="card__category">
+                            <a href="#">{{data.movie_genre}}</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <!-- end card -->
+
+        </div>
+    </div>
+</div>
+{% endblock %}

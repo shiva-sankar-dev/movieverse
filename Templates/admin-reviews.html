@@ -1,0 +1,135 @@
+{% extends 'admin-index.html' %}
+{% block header %}
+{% load static %}
+
+<head>
+	<style>
+		.review-text{
+			width:350px;
+			overflow: hidden;
+		}
+	</style>
+</head>
+	<!-- main content -->
+	<main class="">
+		<div class="container-fluid">
+			<div class="row">
+				<!-- main title -->
+				<div class="col-12">
+					<div class="main__title">
+						<h2>Reviews</h2>
+
+						<span class="main__title-stat">{{total_review}} Total</span>
+
+						<div class="main__title-wrap">
+							<!-- filter sort -->
+
+							<!-- end filter sort -->
+
+							<!-- search -->
+							<form action="#" class="main__title-form">
+								<input type="text" placeholder="Key word..">
+								<button type="button">
+									<i class="icon fa fa-search"></i>
+								</button>
+							</form>
+							<!-- end search -->
+						</div>
+					</div>
+				</div>
+				<!-- end main title -->
+
+				<!-- reviews -->
+				<div class="col-12">
+					<div class="main__table-wrap">
+						<table class="main__table">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>ITEM</th>
+									<th>AUTHOR</th>
+									<th>TEXT</th>
+									<th>RATING</th>
+									<th>CRAETED DATE</th>
+									<th>ACTIONS</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								{% for data in review %}
+								<tr>
+									<td>
+										<div class="main__table-text">{{ data.id }}</div>
+									</td>
+									<td>
+										<div class="main__table-text"><a href="#">{{ data.product_id.movie_title }}</a></div>
+									</td>
+									<td>
+										<div class="main__table-text">{{data.user_id.user_full_name}}</div>
+									</td>
+									<td style="width: 100px;">
+										<div class="main__table-text review-text">{{data.review}}</div>
+									</td>
+									<td>
+										<div class="main__table-text main__table-text--rate"><i class="icon fa fa-star"></i> {{data.star_rating}}</div>
+									</td>
+									<td>
+										<div class="main__table-text">{{data.date}}</div>
+									</td>
+									<td>
+										<div class="main__table-btns">
+											<a href="#modal-view{{ data.id}}" class="main__table-btn main__table-btn--view open-modal">
+												<i class="icon fa fa-eye"></i>
+											</a>
+											<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+												<i class="icon fa fa-trash"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- end reviews -->
+			</div>
+		</div>
+	</main>
+	<!-- end main content -->
+
+	<!-- modal view -->
+	{% for data in review %}
+	<div id="modal-view{{data.id}}" class="zoom-anim-dialog mfp-hide modal modal--view">
+		<div class="reviews__autor">
+			{% if data.img %}
+			<img src="/static/media/{{data.img}}" alt="">
+			{% else %}
+			<img src="../static/assets/images/user.svg" alt="">
+			{% endif %}
+			<span class="reviews__name">{{data.reviewtitle}}</span>
+			<span class="reviews__time">{{data.date}} by {{data.user_id.user_full_name}}</span>
+
+			<span class="reviews__rating"><i class="icon fa fa-star"></i>{{data.star_rating}}</span>
+		</div>
+		<p class="reviews__text"  style="word-break: break-all;">{{data.review}}</p>
+	</div>
+	{% endfor %}
+	<!-- end modal view -->
+
+	<!-- modal delete -->
+	{% for data in review %}
+	<div id="modal-delete" class="zoom-anim-dialog mfp-hide modal">
+		<h6 class="modal__title">Review delete</h6>
+
+		<p class="modal__text">Are you sure to permanently delete this review?</p>
+
+		<div class="modal__btns">
+			<a href="{% url "adminreview_delete" data.id %}" class="modal__btn modal__btn--apply" type="button">Delete</a>
+			<button class="modal__btn modal__btn--dismiss" type="button">Dismiss</button>
+		</div>
+	</div>
+	{% endfor %}
+	<!-- end modal delete -->
+
+{% endblock %}

@@ -1,0 +1,139 @@
+{% load static %}
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="{% static 'assets/css/admin/bootstrap-reboot.min.css' %}">
+	<link rel="stylesheet" href="{% static 'assets/css/admin/bootstrap-grid.min.css' %}">
+	<link rel="stylesheet" href="{% static 'assets/css/admin/magnific-popup.css' %}">
+	<link rel="stylesheet" href="{% static 'assets/css/admin/jquery.mCustomScrollbar.min.css' %}">
+	<link rel="stylesheet" href="{% static 'assets/css/admin/select2.min.css' %}">
+	<link rel="stylesheet" href="{% static 'assets/css/admin/ionicons.min.css' %}">
+	<link rel="stylesheet" href="{% static 'assets/css/admin/admin.css' %}">
+
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<!-- Favicons -->
+	<link rel="icon" type="image/png" href="{% static 'assets/images/logos/tab_logo.png' %}" >
+	<link rel="apple-touch-icon" href="icon/favicon-32x32.png">
+
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<meta name="author" content="Dmitry Volkov">
+	<title>MovieVerse – Online Movies, TV Shows & Cinema HTML Template</title>
+
+</head>
+<body>
+	<!-- header -->
+	<header class="header">
+		<div class="header__content">
+			<!-- header logo -->
+			<a href="{% url "adminindex" %}" class="header__logo" style="padding-left: 12px;">
+				<span style="color: orange;font-size: x-large; " >MOVIE</span> <span style="color: white;font-size: x-large;">VERSE</span> 
+			</a>
+			<!-- end header logo -->
+
+			<!-- header menu btn -->
+			<button class="header__btn" type="button">
+				<span></span>
+				<span></span>
+				<span></span>
+			</button>
+			<!-- end header menu btn -->
+		</div>
+	</header>
+	<!-- end header -->
+
+	<!-- sidebar -->
+	<div class="sidebar">
+		<!-- sidebar logo -->
+		<a href="{% url "adminindex" %}" class="header__logo">
+			<span style="color: orange;font-size: x-large;">MOVIE</span> <span style="color: white;font-size: x-large;">VERSE</span> 
+		</a>
+		<!-- end sidebar logo -->
+		
+		<!-- sidebar user -->
+		<div class="sidebar__user">
+			<div class="sidebar__user-img">
+				<img src="../static/assets/images/dp.jpg" alt="">
+			</div>
+
+			<div class="sidebar__user-title">
+				<span>Admin</span>
+				<p class="dem">John Doe</p>
+			</div>
+
+			<button class="sidebar__user-btn" type="button">
+				<i class="fa fa-arrow-right"></i>
+			</button>
+		</div>
+		<!-- end sidebar user -->
+
+		<!-- sidebar nav -->
+		<div class="sidebar__nav-wrap">
+			<ul class="sidebar__nav">
+				<li class="sidebar__nav-item">
+					<a href="{% url 'admindashboard' %}" class="sidebar__nav-link"><i class=" fa fa-dashboard"></i> <span>dashboard</span></a>
+				</li>
+
+				<li class="sidebar__nav-item">
+					<a href="{% url 'admincatalog' %}" class="sidebar__nav-link"><i class="icon fa fa-film"></i> <span>Catalog</span></a>
+				</li>
+
+				<li class="sidebar__nav-item">
+					<a href="{% url "adminadditem" %}" class="sidebar__nav-link"><i class="icon fa fa-plus"></i> <span>Add item
+					</span></a>
+				</li>
+
+
+
+				<li class="sidebar__nav-item">
+					<a href="{% url 'adminusers' %}" class="sidebar__nav-link"><i class="icon fa fa-address-book"></i> <span>Users</span></a>
+				</li>
+
+				<li class="sidebar__nav-item">
+					<a href="{% url 'admincomments' %}" class="sidebar__nav-link"><i class="icon fa fa-comments"></i> <span>Comments</span></a>
+				</li>
+
+				<li class="sidebar__nav-item">
+					<a href="{% url 'adminreviews' %}" class="sidebar__nav-link"><i class="icon fa fa-star"></i> <span>reviews</span></a>
+				</li>
+			</ul>
+		</div>
+		<!-- end sidebar nav -->
+		
+		<!-- sidebar copyright -->
+		<div class="sidebar__copyright">© MovieVerse, 2019—2021. <br>Create by <a href="https://themeforest.net/user/dmitryvolkov/portfolio" target="_blank">Dmitry Volkov</a></div>
+		<!-- end sidebar copyright -->
+	</div>
+	<!-- end sidebar -->
+
+	<!-- main content -->
+	<main class="main">
+			{% comment %} <div class="row row--grid"> {% endcomment %}
+				<!-- main title -->
+	
+				<!-- end main title -->
+
+				<!-- stats -->
+				{% block header %}
+				{% endblock  %}
+
+				<!-- end stats -->
+		{% comment %} </div> {% endcomment %}
+	</main> 
+	<!-- end main content -->
+
+	<!-- JS -->
+	<script src="{% static 'assets/js/admin/jquery-3.5.1.min.js' %}"></script>
+	<script src="{% static 'assets/js/admin/bootstrap.bundle.min.js' %}"></script>
+	<script src="{% static 'assets/js/admin/jquery.magnific-popup.min.js' %}"></script>
+	<script src="{% static 'assets/js/admin/jquery.mousewheel.min.js' %}"></script>
+	<script src="{% static 'assets/js/admin/jquery.mCustomScrollbar.min.js' %}"></script>
+	<script src="{% static 'assets/js/admin/select2.min.js' %}"></script>
+	<script src="{% static 'assets/js/admin/admin.js' %}"></script>
+</body>
+</html>

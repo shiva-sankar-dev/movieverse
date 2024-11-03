@@ -1,0 +1,137 @@
+
+{% extends 'admin-index.html' %}
+{% load static %}
+{% block header %}
+
+
+
+	<!-- main content -->
+	<main class="">
+		<div class="container-fluid">
+			<div class="row">
+				<!-- main title -->
+				<div class="col-12">
+					<div class="main__title">
+						<h2>Catalog</h2>
+
+						<span class="main__title-stat">{{total_count}} Total</span>
+
+						<div class="main__title-wrap">
+							<!-- filter sort -->
+							<!-- end filter sort -->
+
+							<!-- search -->
+							<form action="#" class="main__title-form">
+								<input type="text" placeholder="Find movie / tv series..">
+								<button type="button">
+									<i class="icon fa fa-search"></i>
+								</button>
+							</form>
+							<!-- end search -->
+						</div>
+					</div>
+				</div>
+				<!-- end main title -->
+
+				<!-- users -->
+				<div class="col-12">
+					<div class="main__table-wrap">
+						<table class="main__table">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>TITLE</th>
+									<th>GENRE</th>
+									<th>CATEGORY</th>
+									<th>TIME</th>
+									{% comment %} <th>VIEWS</th>
+									<th>STATUS</th> {% endcomment %}
+									<th>CRAETED DATE</th>
+									<th>ACTIONS</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								{% for data in catalog %}
+								<tr>
+									<td>
+										<div class="main__table-text">{{data.id}}</div>
+									</td>
+									<td>
+										<div class="main__table-text"><a href="{% url "productdetails" data.id %}">{{data.movie_title}}</a></div>
+									</td>
+									<td>
+										<div class="main__table-text"><a href="#">{{data.movie_genre}}</a></div>
+									</td>
+									<td>
+										<div class="main__table-text"><a href="#">{{data.movie_time}}</a></div>
+									</td>
+									{% comment %} <td>
+										<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 7.9</div>
+										
+									</td> {% endcomment %}
+									<td>
+										<div class="main__table-text">Movie</div>
+									</td>
+									<td>
+										<div class="main__table-text">{{data.date}}</div>
+									</td>
+									<td>
+										<div class="main__table-btns">
+											<a href="#modal-delete{{ data.id }}" class="main__table-btn main__table-btn--delete open-modal">
+												<i class="icon fa fa-trash"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- end users -->
+
+				<!-- paginator -->
+				{% comment %} <div class="col-12">
+					<div class="paginator-wrap">
+						<span>10 from 14 452</span>
+
+						<ul class="paginator">
+							<li class="paginator__item paginator__item--prev">
+								<a href="#"><i class="icon ion-ios-arrow-back"></i></a>
+							</li>
+							<li class="paginator__item"><a href="#">1</a></li>
+							<li class="paginator__item paginator__item--active"><a href="#">2</a></li>
+							<li class="paginator__item"><a href="#">3</a></li>
+							<li class="paginator__item"><a href="#">4</a></li>
+							<li class="paginator__item paginator__item--next">
+								<a href="#"><i class="icon ion-ios-arrow-forward"></i></a>
+							</li>
+						</ul>
+					</div>
+				</div> {% endcomment %}
+				<!-- end paginator -->
+			</div>
+		</div>
+	</main>
+	<!-- end main content -->
+
+
+
+	<!-- modal delete -->
+	{% for data in catalog %}
+	<div id="modal-delete{{data.id}}" class="zoom-anim-dialog mfp-hide modal">
+		<h6 class="modal__title">Item delete</h6>
+
+		<p class="modal__text">Are you sure to permanently delete this item?</p>
+
+		<div class="modal__btns">
+			<a href="{% url "admincatalog_delete" data.id %}" class="modal__btn modal__btn--apply" type="button">Delete</a>
+			<button class="modal__btn modal__btn--dismiss" type="button">Dismiss</button>
+		</div>
+	</div>
+	{% endfor %}
+	<!-- end modal delete -->
+
+{% endblock  %}

@@ -1,0 +1,399 @@
+{% extends 'header-footer.html' %}
+{% load static %}
+{% block header %}
+
+<head>
+	<style>
+		.rating {
+			display: flex;
+			flex-direction: row-reverse; /* Reverse the order of stars */
+		}
+		
+		.rating input[type="radio"] {
+			display: none;
+		}
+		
+		.rating label {
+			font-size: 30px;
+			color: #aaa;
+			cursor: pointer;
+		}
+		
+		/* Color stars from right to left for checked radios */
+		.rating input[type="radio"]:checked ~ label {
+			color: #ffcc00;
+		}
+		
+		/* Color stars from right to left for unchecked radios */
+
+		
+	</style>
+</head>
+	<!-- details -->
+	<section class="section section--details section--bg" data-bg="img/section/details.jpg">
+		<!-- details content -->
+		<div class="container">
+			<div class="row">
+				<!-- title -->
+				<div class="col-12">
+					<h1 class="section__title section__title--mb">{{movie.movie_title}}</h1>
+				</div>
+				<!-- end title -->
+
+				<!-- content -->
+				<div class="col-12 col-xl-6">
+					<div class="card card--details">
+						<div class="row">
+							<!-- card cover -->
+							<div class="col-12 col-sm-5 col-md-4 col-lg-3 col-xl-5">
+								<div class="card__cover">
+									<img src="/static/media/{{movie.movie_cover}}" alt="">
+									<span class="card__rate card__rate--green">{{rating_for_movie}}</span>
+								</div>
+
+							</div>
+							<!-- end card cover -->
+
+							<!-- card content -->
+							<div class="col-12 col-md-8 col-lg-9 col-xl-7">
+								<div class="card__content">
+									<ul class="card__meta">
+										<li><span>Director:</span> {{movie.movie_director}}</li>
+										<li><span>Cast:</span> <a href="#">{{movie.movie_cast}}</a> </li>
+										<li><span>Genre:</span> <a href="#">{{movie.movie_genre}}</a>
+										</li>
+										<li><span>Release year:</span> {{movie.movie_year}}</li>
+										<li><span>Running time:</span> {{movie.movie_time}} min</li>
+										{% if check == 0 %}
+										<li><span>Watch later:</span> <a href="{% url "watch_later_add" movie.id %}"><div style="height: 1.8em;width: 1.8em; border-radius: 90%; border-style: solid;"><i style="color: white;padding-top: 4.5px;padding-left: 5.5px;" class="fa fa-plus"></i></div></a></li>
+										{% else %}
+										<li><span>Watch later:</span> <a href="{% url "watch_later_delete" movie.id %}"><div style="height: 1.8em;width: 1.8em; border-radius: 90%; border-style: solid;"><i style="color: white;padding-top: 4.5px;padding-left: 4.7px;" class="fa fa-check"></i></div></a></li>
+										{% endif %}
+									</ul>
+									<div class="card__description">
+									{{movie.movie_desc}}
+									</div>
+								</div>
+							</div>
+							<!-- end card content -->
+						</div>
+					</div>
+				</div>
+				<!-- end content -->
+     
+				<!-- player -->
+				<div class="col-12 col-xl-6">
+					<video controls crossorigin playsinline  id="player">
+						<!-- Video files -->
+						<source src="/static/media/{{movie.movie_video}}" type="video/mp4" size="1080">
+
+						<!-- Fallback for browsers that don't support the <video> element -->
+					</video>
+					<a href="#" class="card__trailer" onclick="showvideo()"><i class="fa fa-play"></i> Watch trailer</a>
+					<div id="videoContainer" style="display: none;">
+						<video controls style="height: 250px;width: 100%; ">
+							<source src="/static/media/{{movie.movie_trailer}}" type="video/mp4">
+							<!-- You can add additional source tags for different video formats -->
+							
+						  </video>
+						  <script>
+							function showvideo(){
+								var videoContainer = document.getElementById('videoContainer');
+								videoContainer.style.display = 'block'
+							}
+						  </script>
+					</div>
+				</div>
+				<!-- end player -->
+			</div>
+		</div>
+		<!-- end details content -->
+	</section>
+	<!-- end details -->
+
+	<!-- content -->
+	<section class="content">
+		<div class="content__head">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<!-- content title -->
+						<h2 class="content__title">Discover</h2>
+						<!-- end content title -->
+
+						<!-- content tabs nav -->
+						<ul class="nav nav-tabs content__tabs" id="content__tabs" role="tablist">
+							<li class="nav-item">
+								<a class="nav-link active" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Comments</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Reviews</a>
+							</li>
+
+
+						</ul>
+						<!-- end content tabs nav -->
+
+						<!-- content mobile tabs nav -->
+						<div class="content__mobile-tabs" id="content__mobile-tabs">
+							<div class="content__mobile-tabs-btn dropdown-toggle" role="navigation" id="mobile-tabs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<input type="button" value="Comments">
+								<span></span>
+							</div>
+
+							<div class="content__mobile-tabs-menu dropdown-menu" aria-labelledby="mobile-tabs">
+								<ul class="nav nav-tabs" role="tablist">
+									<li class="nav-item"><a class="nav-link active" id="1-tab" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Comments</a></li>
+
+									<li class="nav-item"><a class="nav-link" id="2-tab" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Reviews</a></li>
+								</ul>
+							</div>
+						</div>
+						<!-- end content mobile tabs nav -->
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-lg-8 col-xl-8">
+					<!-- content tabs -->
+					<div class="tab-content">
+						<div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="1-tab">
+							<div class="row">
+								<!-- comments -->
+								<div class="col-12">
+									<div class="comments">
+										{% for d in cmt %}
+										<ul class="comments__list">
+											<li class="comments__item">
+												<div class="comments__autor">
+													{% comment %} <img class="" src="/static/media/{{d.user_id.img}}" alt=""> {% endcomment %}
+													{% if d.user_id.img %}
+													<img class="comments__avatar" src="/static/media/{{d.user_id.img}}" alt="">
+													{% else %}
+													<img class="comments__avatar" src="../static/assets/images/logo.svg" alt="">
+													{% endif %}
+													<span class="comments__name">{{d.user_id.user_full_name}}</span>
+													<span class="comments__time">{{d.cdate}}</span>
+												</div>
+												<p class="comments__text">{{d.comment}}</p>
+
+											</li>
+
+	
+										</ul>
+										{% endfor %}
+
+										<form action="#" class="form" method="post">
+											<textarea id="text" name="addcomment" class="form__textarea" placeholder="Add comment"></textarea>
+											{% csrf_token %}
+											<button type="submit" name="cmtbtn" class="form__btn">Send</button>
+										</form>
+									</div>
+								</div>
+								<!-- end comments -->
+							</div>
+						</div>
+
+						<div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="2-tab">
+							<div class="row">
+								<!-- reviews -->
+								<div class="col-12">
+									<div class="reviews">
+								{% for data in reviews %}
+
+										<ul class="reviews__list">
+											<li class="reviews__item">
+												<div class="reviews__autor">
+													{% if user.img %}
+													<img class="reviews__avatar" src="/static/media/{{user.img}}" alt="">
+													{% else %}
+													<img class="reviews__avatar" src="../static/assets/images/logo.svg" alt="">
+													{% endif %}
+													<span class="reviews__name">{{data.reviewtitle}}</span>
+													<span class="reviews__time">{{data.date}} by {{user.user_full_name}}</span>
+
+													<span class="reviews__rating reviews__rating--green">{{data.star_rating}}</span>
+												</div>
+												<p class="reviews__text">{{data.review}}</p>
+											</li>
+										</ul>
+								{% endfor %}
+
+
+										<form action="#" class="form" method="post">
+											<input type="text" name="reviewtitle" class="form__input" placeholder="Title" required>
+											<textarea class="form__textarea" placeholder="Review" name="review" required></textarea>
+											<div class="rating" >
+												<input type="radio" id="star5" name="rating" value="5">
+												<label for="star5">&#9733;</label>
+												<input type="radio" id="star4" name="rating" value="4">
+												<label for="star4">&#9733;</label>
+												<input type="radio" id="star3" name="rating" value="3">
+												<label for="star3">&#9733;</label>
+												<input type="radio" id="star2" name="rating" value="2">
+												<label for="star2">&#9733;</label>
+												<input type="radio" id="star1" name="rating" value="1">
+												<label for="star1">&#9733;</label>
+											</div>
+											{% csrf_token %}
+											<button type="submit" name="reviewbtn" class="form__btn">Send</button>
+										</form>
+									</div>
+								</div>
+								<!-- end reviews -->
+							</div>
+						</div>
+
+
+					</div>
+					<!-- end content tabs -->
+				</div>
+
+				<!-- sidebar -->
+				{% comment %} <div class="col-12 col-lg-4 col-xl-4">
+					<div class="row row--grid">
+						<!-- section title -->
+						<div class="col-12">
+							<h2 class="section__title section__title--sidebar">You may also like...</h2>
+						</div>
+						<!-- end section title -->
+
+						<!-- card -->
+						<div class="col-6 col-sm-4 col-lg-6">
+							<div class="card">
+								<div class="card__cover">
+									<img src="img/covers/cover.jpg" alt="">
+									<a href="#" class="card__play">
+										<i class="icon ion-ios-play"></i>
+									</a>
+									<span class="card__rate card__rate--green">8.4</span>
+								</div>
+								<div class="card__content">
+									<h3 class="card__title"><a href="#">I Dream in Another Language</a></h3>
+									<span class="card__category">
+										<a href="#">Action</a>
+										<a href="#">Triler</a>
+									</span>
+								</div>
+							</div>
+						</div>
+						<!-- end card -->
+
+						<!-- card -->
+						<div class="col-6 col-sm-4 col-lg-6">
+							<div class="card">
+								<div class="card__cover">
+									<img src="img/covers/cover2.jpg" alt="">
+									<a href="#" class="card__play">
+										<i class="icon ion-ios-play"></i>
+									</a>
+									<span class="card__rate card__rate--green">7.1</span>
+								</div>
+								<div class="card__content">
+									<h3 class="card__title"><a href="#">Benched</a></h3>
+									<span class="card__category">
+										<a href="#">Comedy</a>
+									</span>
+								</div>
+							</div>
+						</div>
+						<!-- end card -->
+
+						<!-- card -->
+						<div class="col-6 col-sm-4 col-lg-6">
+							<div class="card">
+								<div class="card__cover">
+									<img src="img/covers/cover3.jpg" alt="">
+									<a href="#" class="card__play">
+										<i class="icon ion-ios-play"></i>
+									</a>
+									<span class="card__rate card__rate--red">6.3</span>
+								</div>
+								<div class="card__content">
+									<h3 class="card__title"><a href="#">Whitney</a></h3>
+									<span class="card__category">
+										<a href="#">Romance</a>
+										<a href="#">Drama</a>
+										<a href="#">Music</a>
+									</span>
+								</div>
+							</div>
+						</div>
+						<!-- end card -->
+
+						<!-- card -->
+						<div class="col-6 col-sm-4 col-lg-6">
+							<div class="card">
+								<div class="card__cover">
+									<img src="img/covers/cover4.jpg" alt="">
+									<a href="#" class="card__play">
+										<i class="icon ion-ios-play"></i>
+									</a>
+									<span class="card__rate card__rate--green">7.9</span>
+								</div>
+								<div class="card__content">
+									<h3 class="card__title"><a href="#">Blindspotting</a></h3>
+									<span class="card__category">
+										<a href="#">Comedy</a>
+										<a href="#">Drama</a>
+									</span>
+								</div>
+							</div>
+						</div>
+						<!-- end card -->
+
+						<!-- card -->
+						<div class="col-6 col-sm-4 col-lg-6">
+							<div class="card">
+								<div class="card__cover">
+									<img src="img/covers/cover5.jpg" alt="">
+									<a href="#" class="card__play">
+										<i class="icon ion-ios-play"></i>
+									</a>
+									<span class="card__rate card__rate--green">8.4</span>
+								</div>
+								<div class="card__content">
+									<h3 class="card__title"><a href="#">I Dream in Another Language</a></h3>
+									<span class="card__category">
+										<a href="#">Action</a>
+										<a href="#">Triler</a>
+									</span>
+								</div>
+							</div>
+						</div>
+						<!-- end card -->
+
+						<!-- card -->
+						<div class="col-6 col-sm-4 col-lg-6">
+							<div class="card">
+								<div class="card__cover">
+									<img src="img/covers/cover6.jpg" alt="">
+									<a href="#" class="card__play">
+										<i class="icon ion-ios-play"></i>
+									</a>
+									<span class="card__rate card__rate--green">7.1</span>
+								</div>
+								<div class="card__content">
+									<h3 class="card__title"><a href="#">Benched</a></h3>
+									<span class="card__category">
+										<a href="#">Comedy</a>
+									</span>
+								</div>
+							</div>
+						</div>
+						<!-- end card -->
+					</div>
+				</div> {% endcomment %}
+				<!-- end sidebar -->
+			</div>
+		</div>
+	</section>
+	<!-- end content -->
+
+
+
+{% endblock %}

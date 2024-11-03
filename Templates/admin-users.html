@@ -1,0 +1,115 @@
+{% extends 'admin-index.html' %}
+{% block header %}
+{% load static %}
+<body>
+
+<main class="">
+	<div class="container-fluid">
+		<div class="row">
+			<!-- main title -->
+			<div class="col-12">
+				<div class="main__title">
+					<h2>Users</h2>
+
+					<span class="main__title-stat">{{total_users}} Total</span>
+
+					<div class="main__title-wrap">
+						<!-- filter sort -->
+
+						<!-- end filter sort -->
+
+						<!-- search -->
+						<form action="#" class="main__title-form">
+							<input type="text" placeholder="Find user..">
+							<button type="button">
+								<i class="icon fa fa-search"></i>
+							</button>
+						</form>
+						<!-- end search -->
+					</div>
+				</div>
+			</div>
+			<!-- end main title -->
+
+			<!-- users -->
+			<div class="col-12">
+				<div class="main__table-wrap">
+					<table class="main__table">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>BASIC INFO</th>
+								<th>USERNAME</th>
+								<th>CRAETED DATE</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							{% for data in users %}
+
+								<tr>
+									<td>
+										<div class="main__table-text">{{data.id}}</div>
+									</td>
+									<td>
+										<div class="main__user">
+											<div class="main__avatar">
+												{% if data.img %}
+												<img src="/static/media/{{data.img}}" alt="">
+												{% else %}
+												<img src="../static/assets/images/user.svg" alt="">
+												{% endif %}
+											</div>
+											<div class="main__meta">
+												<h3>{{data.user_full_name}}</h3>
+												<span>{{data.user_email}}</span>
+											</div>
+										</div>
+									</td>
+									<td>
+										<div class="main__table-text">{{data.user_full_name}}</div>
+									</td>
+									<td>
+										<div class="main__table-text">{{data.date}}</div>
+									</td>
+								</tr>
+							{% endfor %}					
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- end users -->
+
+		</div>
+	</div>
+</main>
+<!-- end main content -->
+
+<!-- modal status -->
+<div id="modal-status" class="zoom-anim-dialog mfp-hide modal">
+	<h6 class="modal__title">Status change</h6>
+
+	<p class="modal__text">Are you sure about immediately change status?</p>
+
+	<div class="modal__btns">
+		<button class="modal__btn modal__btn--apply" type="button">Apply</button>
+		<button class="modal__btn modal__btn--dismiss" type="button">Dismiss</button>
+	</div>
+</div>
+<!-- end modal status -->
+
+<!-- modal delete -->
+<div id="modal-delete" class="zoom-anim-dialog mfp-hide modal">
+	<h6 class="modal__title">User delete</h6>
+
+	<p class="modal__text">Are you sure to permanently delete this user?</p>
+
+	<div class="modal__btns">
+		<button class="modal__btn modal__btn--apply" type="button">Delete</button>
+		<button class="modal__btn modal__btn--dismiss" type="button">Dismiss</button>
+	</div>
+</div>
+</body>
+
+{% endblock %}
+<!-- end modal delete -->

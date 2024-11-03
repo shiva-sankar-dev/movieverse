@@ -1,0 +1,468 @@
+{% extends "header-footer.html" %}
+{% load static %}
+{% block header %}
+
+
+	<style>
+		.home--bg:before {
+
+			  background: url("{% static 'assets/images/home/home__bg.jpg' %}") no-repeat center/cover;
+		  }
+	</style></head>
+
+
+
+
+	<!-- home -->
+	<section class="home home--bg">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<h1 class="home__title"><span>LATEST MOVIES ON</span> <b style="color: orange;">MOVIE</b> <b style="color: white;">VERSE</b> </h1>
+
+					<button class="home__nav home__nav--prev" type="button">
+						<i class="fa fa-arrow-left" style="font-size:0.5em;"></i>
+					</button>
+					<button class="home__nav home__nav--next" type="button">
+						<i class="fa fa-arrow-right"  style="font-size:0.5em;"></i>
+					</button>
+				</div>
+
+				<div class="col-12">
+					<div class="owl-carousel home__carousel home__carousel--default">
+						{% for data in latest_movie %}
+						<div class="card card--big">
+							<div class="card__cover">
+								<img src="/static/media/{{data.movie_cover}}" alt="">
+								<a href="{% url "productdetails" data.id %}" class="card__play">
+									<i class="fa fa-play"></i>
+								</a>
+								
+							</div>
+							<div class="card__content">
+								<h3 class="card__title"><a href="details.html">{{data.movie_title}}</a></h3>
+								<span class="card__category">
+									<a href="{% url "filter" %}">{{data.movie_genre}}</a>
+									{% comment %} <a href="#">Triler</a> {% endcomment %}
+								</span>
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- end home -->
+
+	<!-- filter -->
+	<div class="filter">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<form action="{% url "filter" %}" method="post" >
+						{% csrf_token %}
+					<div class="filter__content">
+						<div class="filter__items">
+							<!-- filter item -->
+							<div class="filter__item" id="filter__genre">
+								<span class="filter__item-label">GENRE:</span>
+
+								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-genre" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<input type="button" value="Action/Adventure">
+									<span></span>
+								</div>
+								<section>
+								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter-genre">
+									<li><label><input type="radio" name="genre" value="Animation"> Animation</label></li>
+									<li><label><input type="radio" name="genre" value="Sci-Fi"> Sci-Fi</label></li>
+									<li><label><input type="radio" name="genre" value="Comedy"> Comedy</label></li>
+									<li><label><input type="radio" name="genre" value="Romance"> Romance</label></li>
+									<li><label><input type="radio" name="genre" value="Adventure"> Adventure</label></li>
+									<li><label><input type="radio" name="genre" value="Fantasy"> Fantasy</label></li>
+									<li><label><input type="radio" name="genre" value="Mystery"> Mystery</label></li>
+									<li><label><input type="radio" name="genre" value="Horror"> Horror</label></li>
+									<li><label><input type="radio" name="genre" value="Drama"> Drama</label></li>
+									<li><label><input type="radio" name="genre" value="Action"> Action</label></li>
+									<li><label><input type="radio" name="genre" value="Thriller"> Thriller</label></li>
+									<li><label><input type="radio" name="genre" value="Family"> Family</label></li>
+									<li><label><input type="radio" name="genre" value="International"> International</label></li>
+									<li><label><input type="radio" name="genre" value="Travel"> Travel</label></li>
+									<li><label><input type="radio" name="genre" value="History"> History</label></li>
+									<li><label><input type="radio" name="genre" value="Kids"> Kids</label></li>
+									
+								</ul></section>
+							</div>
+							
+							<!-- end filter item -->
+						</div>
+						<div>
+							<p style="color: orange;text-transform: uppercase;">
+								{% if messages %}
+								{% for mes in messages %}
+								  {{ mes }}
+								{% endfor %}
+							  {% endif %}
+							</p>
+						</div>
+						<!-- filter btn -->
+						<button class="filter__btn" type="submit" name="filter_btn">apply filter</button>
+						<!-- end filter btn -->
+					</div>
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end filter -->
+	
+	<!-- catalog -->
+	<div class="catalog">
+		<div class="container">
+			<div class="row row--grid">
+				<!-- card -->
+				{% for a in allmovie %}
+				<div class="col-6 col-sm-4 col-md-3 col-xl-2">
+					<div class="card">
+						<div class="card__cover">
+							<img src="/static/media/{{a.movie_cover}}" alt="">
+							<a href="{% url 'productdetails' a.id  %}" class="card__play">
+								<i class="fa fa-play"></i>
+							</a>
+							
+						</div>
+						<div class="card__content">
+							<h3 class="card__title"><a href="details.html">{{a.movie_title}}</a></h3>
+							<span class="card__category">
+								<a href="#">{{a.movie_genre}}</a>
+
+							</span>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+				<!-- end card -->
+
+			</div>
+
+			<div class="row">
+				<!-- paginator -->
+				<!-- paginator -->
+<div class="col-12">
+    <ul class="paginator">
+        <li class="paginator__item paginator__item--prev">
+            {% if allmovie.has_previous %}
+            <a href="?page={{ allmovie.previous_page_number }}"><i class="fa fa-arrow-left"></i></a>
+            {% endif %}
+        </li>
+        {% for page_num in allmovie.paginator.page_range %}
+            <li class="paginator__item{% if allmovie.number == page_num %} paginator__item--active{% endif %}">
+                <a href="?page={{ page_num }}">{{ page_num }}</a>
+            </li>
+        {% endfor %}
+        <li class="paginator__item paginator__item--next">
+            {% if allmovie.has_next %}
+            <a href="?page={{ allmovie.next_page_number }}"><i class="fa fa-arrow-right"></i></a>
+            {% endif %}
+        </li>
+    </ul>
+</div>
+<!-- end paginator -->
+
+				
+				<!-- end paginator -->
+			</div>
+		</div>
+	</div>
+	<!-- end catalog -->
+
+	<!-- section -->
+	<section class="section section--border">
+		<div class="container">
+			<div class="row">
+				<!-- section title -->
+				<div class="col-12">
+					<div class="section__title-wrap">
+						<h2 class="section__title">Latest <span style="color: orange;">Comedy</span> Movies</h2>
+
+						<div class="section__nav-wrap">
+
+							<a href="{% url "movie_list" genre="Comedy" %}" class="section__view" >View All</a>
+
+							<button class="section__nav section__nav--prev" type="button" data-nav="#carousel1">
+								<i class="fa fa-arrow-left"></i>
+							</button>
+
+							<button class="section__nav section__nav--next" type="button" data-nav="#carousel1">
+								<i class="fa fa-arrow-right"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+				<!-- end section title -->
+
+				<!-- carousel -->
+				<div class="col-12">
+					<div class="owl-carousel section__carousel" id="carousel1">
+						{% for data in comedymovies %}
+
+						<div class="card">
+							<div class="card__cover">
+								<img src="/static/media/{{data.movie_cover}}" alt="">
+								<a href="{% url "productdetails" data.id %}" class="card__play">
+									<i class="fa fa-play"></i>
+								</a>
+								
+							</div>
+							<div class="card__content">
+								<h3 class="card__title"><a href="details.html">{{data.movie_title}}</a></h3>
+								<span class="card__category">
+									<a href="#">{{data.movie_genre}}</a>
+
+								</span>
+							</div>
+						</div>
+						{% endfor %}
+
+					</div>
+				</div>
+				<!-- carousel -->
+			</div>
+		</div>
+	</section>
+	<!-- end section -->
+
+		<!-- section -->
+		<section class="section section--border">
+			<div class="container">
+				<div class="row">
+					<!-- section title -->
+					<div class="col-12">
+						<div class="section__title-wrap">
+							<h2 class="section__title">Latest <span style="color: orange;">Romantic</span> Movies</h2>
+	
+							<div class="section__nav-wrap">
+								<a href="{% url "movie_list" genre="Romantic" %}" class="section__view" >View All</a>
+
+								<button class="section__nav section__nav--prev" type="button" data-nav="#carousel2">
+									<i class="fa fa-arrow-left"></i>
+								</button>
+	
+								<button class="section__nav section__nav--next" type="button" data-nav="#carousel2">
+									<i class="fa fa-arrow-right"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+					<!-- end section title -->
+	
+					<!-- carousel -->
+					<div class="col-12">
+						<div class="owl-carousel section__carousel" id="carousel2">
+							{% for data in romanticmovies %}
+	
+							<div class="card">
+								<div class="card__cover">
+									<img src="/static/media/{{data.movie_cover}}" alt="">
+									<a href="{% url "productdetails" data.id %}" class="card__play">
+										<i class="fa fa-play"></i>
+									</a>
+									
+								</div>
+								<div class="card__content">
+									<h3 class="card__title"><a href="details.html">{{data.movie_title}}</a></h3>
+									<span class="card__category">
+										<a href="#">{{data.movie_genre}}</a>
+	
+									</span>
+								</div>
+							</div>
+							{% endfor %}
+	
+						</div>
+					</div>
+					<!-- carousel -->
+				</div>
+			</div>
+		</section>
+		<!-- end section -->
+
+			<!-- section -->
+	<section class="section section--border">
+		<div class="container">
+			<div class="row">
+				<!-- section title -->
+				<div class="col-12">
+					<div class="section__title-wrap">
+						<h2 class="section__title">Latest <span style="color: orange;">Science-fiction</span> Movies</h2>
+
+						<div class="section__nav-wrap">
+							<a href="{% url "movie_list" genre="Science-fiction" %}" class="section__view" >View All</a>
+
+
+							<button class="section__nav section__nav--prev" type="button" data-nav="#carousel3">
+								<i class="fa fa-arrow-left"></i>
+							</button>
+
+							<button class="section__nav section__nav--next" type="button" data-nav="#carousel3">
+								<i class="fa fa-arrow-right"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+				<!-- end section title -->
+
+				<!-- carousel -->
+				<div class="col-12">
+					<div class="owl-carousel section__carousel" id="carousel3">
+						{% for data in science_fictionymovies %}
+
+						<div class="card">
+							<div class="card__cover">
+								<img src="/static/media/{{data.movie_cover}}" alt="">
+								<a href="{% url "productdetails" data.id %}" class="card__play">
+									<i class="fa fa-play"></i>
+								</a>
+								
+							</div>
+							<div class="card__content">
+								<h3 class="card__title"><a href="details.html">{{data.movie_title}}</a></h3>
+								<span class="card__category">
+									<a href="#">{{data.movie_genre}}</a>
+
+								</span>
+							</div>
+						</div>
+						{% endfor %}
+
+					</div>
+				</div>
+				<!-- carousel -->
+			</div>
+		</div>
+	</section>
+	<!-- end section -->
+
+		<!-- section -->
+		<section class="section section--border">
+			<div class="container">
+				<div class="row">
+					<!-- section title -->
+					<div class="col-12">
+						<div class="section__title-wrap">
+							<h2 class="section__title">Latest <span style="color: orange;">Animation</span> Movies</h2>
+	
+							<div class="section__nav-wrap">
+								<a href="{% url "movie_list" genre="Animation" %}" class="section__view" >View All</a>
+	
+								<button class="section__nav section__nav--prev" type="button" data-nav="#carousel4">
+									<i class="fa fa-arrow-left"></i>
+								</button>
+	
+								<button class="section__nav section__nav--next" type="button" data-nav="#carousel4">
+									<i class="fa fa-arrow-right"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+					<!-- end section title -->
+	
+					<!-- carousel -->
+					<div class="col-12">
+						<div class="owl-carousel section__carousel" id="carousel4">
+							{% for data in animationmovies %}
+	
+							<div class="card">
+								<div class="card__cover">
+									<img src="/static/media/{{data.movie_cover}}" alt="">
+									<a href="{% url "productdetails" data.id %}" class="card__play">
+										<i class="fa fa-play"></i>
+									</a>
+									
+								</div>
+								<div class="card__content">
+									<h3 class="card__title"><a href="details.html">{{data.movie_title}}</a></h3>
+									<span class="card__category">
+										<a href="#">{{data.movie_genre}}</a>
+	
+									</span>
+								</div>
+							</div>
+							{% endfor %}
+	
+						</div>
+					</div>
+					<!-- carousel -->
+				</div>
+			</div>
+		</section>
+		<!-- end section -->
+	
+
+	<!-- section -->
+	<section class="section section--border">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-xl-10">
+					<h2 class="section__title section__title--mb"><b>MovieVerse</b> – Best Place for Movies</h2>
+
+					<p class="section__text">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of <b>using Lorem</b> Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.</p>
+
+					<p class="section__text">Content here, content here, making it look like <a href="#">readable</a> English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+				</div>
+			</div>
+
+
+		</div>
+	</section>
+	<!-- end section -->
+
+
+
+{% endblock  %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
