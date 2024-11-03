@@ -26,7 +26,11 @@ SECRET_KEY = 'django-insecure-to1s8ek00vxg3soxg)irssrnd#b%t(a^z1jko+7c=a5423z7+4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+
+ALLOWED_HOSTS = ['movieverse-production-2024.up.railway.app', 'localhost', '127.0.0.1']
+
+CSRF_TRUSTED_ORIGINS = ['https://movieverse-production-2024.up.railway.app']
+
 
 
 # Application definition
