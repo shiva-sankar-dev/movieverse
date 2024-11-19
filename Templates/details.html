@@ -3,9 +3,11 @@
 {% block header %}
 
 <head>
+	<link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+
 	<style>
 		.rating {
-			display: flex;
+			disyay: flex;
 			flex-direction: row-reverse; /* Reverse the order of stars */
 		}
 		
@@ -50,10 +52,55 @@
 									<img src="/static/media/{{movie.movie_cover}}" alt="">
 									<span class="card__rate card__rate--green">{{rating_for_movie}}</span>
 								</div>
+								<a style="color: white;" id="openTrailer" class="card__trailer"><i class="icon ion-ios-play-circle"></i> Watch trailer</a>
 
 							</div>
-							<!-- end card cover -->
+							<style>
+								.video-container{
+									display: none;
+									justify-content: center;
+									align-items: center;
+									position: fixed;
+									height: 100%;
+									width: 100%;
+									top: 0;
+									z-index: 99;
+									left: 0;
+									background-color: rgba(0, 0, 0, 0.3);
+								}
+								.trailer-content {
+									max-height: 80%; 
+									max-width: 80%; 
+									width: 70%; 
+									height: auto; io 
+									border-radius: 5px; 
+									box-shadow: 0 8px 15px rgba(0, 0, 0, 0.7);
+								}
+								
+								
+								@media (max-width: 768px) {
+									.trailer-content {
+										width: 95%;
+										max-height: 90%;
+									}
+								}
+								
+								or very large screens */
+								@media (min-width: 1600px) {
+									.trailer-content {
+										width: 90%;
+									}
+								}
+							</style>
 
+							<div class="video-container" id="videoContainer" style="display: ;">
+									<video controls crossorigin playsinline class="trailer-content">
+										<source src="/static/media/{{movie.movie_video}}" type="video/mp4" size="1080">
+									</video>
+								
+							</div>
+
+							
 							<!-- card content -->
 							<div class="col-12 col-md-8 col-lg-9 col-xl-7">
 								<div class="card__content">
@@ -84,25 +131,8 @@
 				<!-- player -->
 				<div class="col-12 col-xl-6">
 					<video controls crossorigin playsinline  id="player">
-						<!-- Video files -->
 						<source src="/static/media/{{movie.movie_video}}" type="video/mp4" size="1080">
-
-						<!-- Fallback for browsers that don't support the <video> element -->
 					</video>
-					<a href="#" class="card__trailer" onclick="showvideo()"><i class="fa fa-play"></i> Watch trailer</a>
-					<div id="videoContainer" style="display: none;">
-						<video controls style="height: 250px;width: 100%; ">
-							<source src="/static/media/{{movie.movie_trailer}}" type="video/mp4">
-							<!-- You can add additional source tags for different video formats -->
-							
-						  </video>
-						  <script>
-							function showvideo(){
-								var videoContainer = document.getElementById('videoContainer');
-								videoContainer.style.display = 'block'
-							}
-						  </script>
-					</div>
 				</div>
 				<!-- end player -->
 			</div>
@@ -208,13 +238,13 @@
 										<ul class="reviews__list">
 											<li class="reviews__item">
 												<div class="reviews__autor">
-													{% if user.img %}
-													<img class="reviews__avatar" src="/static/media/{{user.img}}" alt="">
+													{% if data.user_id.img %}
+													<img class="reviews__avatar" src="/static/media/{{data.user_id.img}}" alt="">
 													{% else %}
 													<img class="reviews__avatar" src="../static/assets/images/logo.svg" alt="">
 													{% endif %}
 													<span class="reviews__name">{{data.reviewtitle}}</span>
-													<span class="reviews__time">{{data.date}} by {{user.user_full_name}}</span>
+													<span class="reviews__time">{{data.date}} by {{data.user_id.user_full_name}}</span>
 
 													<span class="reviews__rating reviews__rating--green">{{data.star_rating}}</span>
 												</div>
@@ -394,6 +424,17 @@
 	</section>
 	<!-- end content -->
 
-
+	<script>
+		const openTrailer = document.querySelector("#openTrailer")
+		const trailer = document.querySelector("#videoContainer")
+		openTrailer.addEventListener("click",() => {
+			trailer.style.display = "flex"
+		})
+		window.addEventListener('click',(event) => {
+			if(event.target === trailer){
+				trailer.style.display = "none"
+			}
+		})
+	</script>
 
 {% endblock %}

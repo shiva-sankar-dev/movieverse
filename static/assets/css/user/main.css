@@ -3594,7 +3594,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
   transition: opacity 0.5s;
 }
 .mfp-iframe-holder .mfp-close:before {
-  content: '';
+  content: '';
   font-family: "Ionicons";
   position: absolute;
   top: 0;

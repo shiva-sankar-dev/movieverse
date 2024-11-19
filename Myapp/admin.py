@@ -6,4 +6,7 @@ from .models import *
 admin.site.register(user_reg)
 admin.site.register(Addproduct)
 admin.site.register(comments)
+admin.site.register(Login)
 admin.site.register(rating)
+admin.site.register(contact)
+admin.site.register(watchlater)

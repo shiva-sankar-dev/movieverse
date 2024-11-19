@@ -17,7 +17,7 @@
 	<link rel="stylesheet" href="{% static 'assets/css/user/default-skin.css' %}">
 	<link rel="stylesheet" href="{% static 'assets/css/user/main.css' %}">
 	<link rel="icon" type="image/png" href="{% static 'assets/images/logos/tab_logo.png' %}" >
-
+	<link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
 	<!-- Favicons -->
 	<link rel="icon" type="image/png" href="icon/favicon-32x32.png" sizes="32x32">
 	<link rel="apple-touch-icon" href="icon/favicon-32x32.png">
@@ -40,17 +40,19 @@
 							<a href="{% url "home" %}" class="sign__logo">
 								<span style="color: orange;font-size: x-large;">MOVIE</span> <span style="color: white;font-size: x-large;">VERSE</span> 
 							</a>
-
+							{% for msg in messages %}
+							<p style="color:crimson;">* {{msg}}</p>
+							{% endfor %}
 							<div class="sign__group">
-								<input type="text" name="name" class="sign__input" placeholder="Name">
+								<input type="text" name="name" class="sign__input" placeholder="Name" required>
 							</div>
 
 							<div class="sign__group">
-								<input type="text" name="email" class="sign__input" placeholder="Email">
+								<input type="text" name="email" class="sign__input" placeholder="Email" required>
 							</div>
 
 							<div class="sign__group">
-								<input type="password" name="password" class="sign__input" placeholder="Password">
+								<input type="password" name="password" class="sign__input" placeholder="Password" required>
 							</div>
 
 							<div class="sign__group sign__group--checkbox">

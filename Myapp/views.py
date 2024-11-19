@@ -126,22 +126,32 @@ def signup(request):
         email=request.POST['email']
         password=request.POST['password']
         cdate=date.today()
-        log=Login.objects.create_user(username=email,password=password,userType='Customer',viewpassword=password)
-        log.save()
-        obj=user_reg.objects.create(user=log,user_full_name=name,user_email=email,user_password=password,date=cdate)
-        obj.save()
+        if Login.objects.filter(username=email).exists():
+            messages.error(request,"E-mail already exist")
+            return redirect("signup")
+        else:
+            log=Login.objects.create_user(username=email,password=password,userType='Customer',viewpassword=password)
+            log.save()
+            obj=user_reg.objects.create(user=log,user_full_name=name,user_email=email,user_password=password,date=cdate)
+            obj.save()
+            return redirect('login')
+        
+
     return render(request,"signup.html")
 
 def user_login(request):
-    if request.POST:
+    if request.method == 'POST':
         email=request.POST['email']
         password=request.POST['password']
         customer=authenticate(username=email,password=password)
         if customer:
             login(request,customer)
             request.session["userID"]=customer.id
-            print(customer.id)
+            # print(customer.id)
             return redirect('home')
+        else:
+            messages.error(request, "Invalid email or password.")
+            return redirect('login')
 
     return render(request,"signin.html")
 
@@ -224,29 +234,28 @@ def movie_list(request,genre):
     return render(request,"movie-list.html",context)
 
 def search(request):
-    result=None
-    if 'search' in request.POST:
-        searchtxt=request.POST['tosearch']
+    result=""
+    if 'search' in request.GET:
+        searchtxt=request.GET['tosearch']
         result=Addproduct.objects.filter(movie_title__contains=searchtxt).order_by('-id')
     context={
 
         "result":result,
+        "searchtxt":searchtxt,
 
     } 
     return render(request,"search.html",context)
 
 def filter(request):
 
-    if 'filter_btn' in request.POST:
-        if "genre" in request.POST:
-            genre=request.POST['genre']          
-            filter_apply=Addproduct.objects.filter(movie_genre=genre)
-            filter_apply_count=Addproduct.objects.filter(movie_genre=genre).count()
-
-        else:
-            message_success="Please select a filter first"
-            messages.error(request,message_success)
-            return redirect("home")
+    if "genre" in request.GET:
+        genre=request.GET['genre']          
+        filter_apply=Addproduct.objects.filter(movie_genre=genre)
+        filter_apply_count=Addproduct.objects.filter(movie_genre=genre).count()
+    else:
+        message_success="Please select a filter first"
+        messages.error(request,message_success)
+        return redirect("home")
             
 
     context={
@@ -261,6 +270,8 @@ def usernavandfoot(request):
 def about(request):
     return render(request,"about.html")
 
+import requests
+
 def contacts(request):
     if request.method == 'POST':
         name=request.POST['name']
@@ -270,11 +281,28 @@ def contacts(request):
         cdate=date.today()
         obj=contact.objects.create(fullname=name,mail=email,subject=subject,message=message,date=cdate)
         obj.save()
+        data={
+            "access_key": "0fe05a4e-e52d-4253-ac6e-34e6034c1b7d", 
+            "name": name,
+            "email": email,
+            "subject of message": subject,
+            "message": message
+        }
+        response = requests.post("https://api.web3forms.com/submit",json=data)
+        result = response.json()
+        if result.get("success"):
+            messages.success(request, "Message sent successfully!")
+        else:
+            messages.error(request, "Message failed to send.")
+        return redirect("contacts")
+            
     return render(request,"contacts.html")
 
 def productdetails(request,id):
-    uid=request.session["userID"]
-    user=user_reg.objects.get(user__id=uid)
+    user = ""
+    if "userID" in request.session:
+        uid=request.session["userID"]
+        user=user_reg.objects.get(user__id=uid)
     movie=Addproduct.objects.get(id=id)
     cmt=comments.objects.filter(product_id=id).order_by('-id')
     reviews=rating.objects.filter(product_id=id).order_by('-id')
@@ -318,7 +346,7 @@ def productdetails(request,id):
         "movie":movie,
         "cmt":cmt,
         "reviews":reviews,
-        "user":user,
+        "custom_user":user,
         "rating_for_movie":rating_for_movie,
         "check":check,
 
@@ -395,7 +423,7 @@ def profile(request):
 
 
     context={
-        "user":user,
+        "custom_user":user,
         "cmtcount":cmtcount,
         "reviewcount":reviewcount,
         "reviews":reviews
